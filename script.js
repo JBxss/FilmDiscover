@@ -18,8 +18,37 @@ async function loadMovies(searchTerm) {
 }
 
 function findMovies() {
-  let searchTerm = movieSearchBox.value;
-  console.log(searchTerm);
+  let searchTerm = movieSearchBox.value.trim();
+  if (searchTerm.length > 0) {
+    searchList.classList.remove("hide-search-list");
+    loadMovies(searchTerm);
+  } else {
+    searchList.classList.add("hide-search-list");
+  }
 }
 
-function displayMovieList(movies) {}
+function displayMovieList(movies) {
+  searchList.innerHTML = "";
+  for (let idx = 0; idx < movies.length; idx++) {
+    let moviesListItem = document.createElement("div");
+    moviesListItem.dataset.id = movies[idx].imdbID;
+    moviesListItem.classList.add("search-list-item");
+    if (movies[idx].Poster !== "N/A") {
+      moviePoster = movies[idx].Poster;
+    } else {
+      moviePoster = "./image_not_found.png";
+    }
+
+    moviesListItem.innerHTML = `
+        <div class="search-item-thumbnail">
+            <img src="${moviePoster}" alt="">
+        </div>
+        <div class="search-item-info">
+            <h3>${movies[idx].Title}</h3>
+            <p>${movies[idx].Year}</p>
+        </div>
+        `;
+
+    searchList.appendChild(moviesListItem);
+  }
+}
