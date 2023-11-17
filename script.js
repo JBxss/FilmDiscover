@@ -54,25 +54,29 @@ function displayMovieList(movies) {
   loadMovieDetails();
 }
 
-function loadMovieDetails(){
-    const searchListMovies = searchList.querySelectorAll(".search-list-item");
-    searchListMovies.forEach(movie => {
-        movie.addEventListener("click", async () => {
-            // console.log(movie.dataset.id);
-            searchList.classList.add('hide-search-list');
-            movieSearchBox.value = "";
-            const result = await fetch(`http://www.omdbapi.com/?i=${movie.dataset.id}&apikey=fc1fef96`);
-            const movieDetails = await result.json();
-            // console.log(movieDetails);
-            displayMovieDetails(movieDetails);
-        });
-    })
+function loadMovieDetails() {
+  const searchListMovies = searchList.querySelectorAll(".search-list-item");
+  searchListMovies.forEach((movie) => {
+    movie.addEventListener("click", async () => {
+      // console.log(movie.dataset.id);
+      searchList.classList.add("hide-search-list");
+      movieSearchBox.value = "";
+      const result = await fetch(
+        `http://www.omdbapi.com/?i=${movie.dataset.id}&apikey=fc1fef96`
+      );
+      const movieDetails = await result.json();
+      // console.log(movieDetails);
+      displayMovieDetails(movieDetails);
+    });
+  });
 }
 
-function displayMovieDetails(details){
-    resultGrid.innerHTML = `
+function displayMovieDetails(details) {
+  resultGrid.innerHTML = `
     <div class="movie-poster">
-        <img src="${(details.Poster !== "N/A") ? details.Poster : "./image_not_found.png"}" alt="movie poster">
+        <img src="${
+          details.Poster !== "N/A" ? details.Poster : "./image_not_found.png"
+        }" alt="movie poster">
     </div>
     <div class="movie-info">
         <h3 class="movie-title">${details.Title}</h3>
@@ -86,7 +90,15 @@ function displayMovieDetails(details){
         <p class="actors"><b>Actors:</b> ${details.Actors}</p>
         <p class="plot"><b>Plot:</b> ${details.Plot}</p>
         <p class="language"><b>Language:</b> ${details.Language}</p>
-        <p class="awards"><b><i class="fas fa-award"></i></b> ${details.Awards}</p>
+        <p class="awards"><b><i class="fas fa-award"></i></b> ${
+          details.Awards
+        }</p>
     </div>
     `;
-};
+}
+
+window.addEventListener("click", (event) => {
+  if (event.target.className != "form-control") {
+    searchList.classList.add("hide-search-list");
+  }
+});
